@@ -1,7 +1,8 @@
-const db = require("../db/connection");
-const app = require("../app");
+const db = require("../db/connection.js");
+const app = require("../server.js");
+const data = require("../db/data/test_data")
 
-beforeAll(() => setImmediate(data));
+beforeAll(() => seed(data));
 afterAll(() => db.end());
 
 describe("", () => {
