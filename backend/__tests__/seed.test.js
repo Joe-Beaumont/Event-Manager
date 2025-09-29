@@ -102,7 +102,7 @@ describe('creating tables', () => {
                 expect(column.data_type).toBe('integer');
             });
         });
-        test('events table contains name as varying character', () => {
+        test('events table contains name as text', () => {
             return db
             .query(
                 `SELECT *
@@ -112,10 +112,10 @@ describe('creating tables', () => {
             )
             .then(({ rows: [column] }) => {
                 expect(column.column_name).toBe('name');
-                expect(column.data_type).toBe('character varying');
+                expect(column.data_type).toBe('text');
             });
         });
-        test('events table contains description as varying character', () => {
+        test('events table contains description as text', () => {
             return db
             .query(
                 `SELECT *
@@ -125,7 +125,7 @@ describe('creating tables', () => {
             )
             .then(({ rows: [column] }) => {
                 expect(column.column_name).toBe('description');
-                expect(column.data_type).toBe('character varying');
+                expect(column.data_type).toBe('text');
             });
         });
         test('events table contains date as date', () => {

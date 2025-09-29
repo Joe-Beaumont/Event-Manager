@@ -36,7 +36,7 @@ function createUsers (){
     return db.query(`CREATE TABLE users (
         user_id SERIAL PRIMARY KEY,
         email VARCHAR(320) NOT NULL,
-        password VARCHAR(100) NOT NULL,
+        password VARCHAR(255) NOT NULL,
         role VARCHAR(40) NOT NULL
         );`)
 }
@@ -44,8 +44,8 @@ function createUsers (){
 function createEvents (){
     return db.query(`CREATE TABLE events (
         event_id SERIAL PRIMARY KEY,
-        name VARCHAR(40) NOT NULL,
-        description VARCHAR(320) NOT NULL,
+        name TEXT NOT NULL,
+        description TEXT NOT NULL,
         date DATE NOT NULL,
         time TIME NOT NULL,
         created_by INT REFERENCES users(user_id)
