@@ -20,3 +20,8 @@ Packages installed for backend:
 express,
 jest,
 cors,
+postgres?,
+pg,
+pg-format,
+dotenv,
+
