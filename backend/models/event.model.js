@@ -1,4 +1,5 @@
 const db = require("../db/connection");
+const format = require("pg-format");
 
 exports.fetchEvents = () => {
     return db.query(`SELECT * FROM events;`)
@@ -8,4 +9,16 @@ exports.fetchEvents = () => {
 exports.fetchEvent = (event_id) => {
     return db.query(`SELECT * FROM events WHERE event_id = $1`, [event_id])
     .then(({ rows }) => rows[0]);
-}
+};
+
+exports.insertEvent = (name, description, date, time, created_by) => {
+    const newEvent = format(`INSERT INTO events
+            (name, description, date, time, created_by)
+            VALUES %L RETURNING *`,
+            [[name, description, date, time, created_by]]
+        );
+        return db.query(newEvent)
+        .then(({ rows }) => {
+            return {event: rows[0]}
+        });
+};
