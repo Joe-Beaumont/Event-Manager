@@ -1,6 +1,10 @@
-const { Pool } = require('pg');
+const { Pool, types } = require('pg');
 const ENV = process.env.NODE_ENV || 'development';
 require('dotenv').config({ path: `${__dirname}/../.env.${ENV}`});
+
+// Overriding parsing of dates
+types.setTypeParser(1082, (val) => val);
+
 if(!process.env.PGDATABASE && !process.env.DATABASE_URL) {
     throw new Error('No PGDATABASE configured or DATABASE_URL not set');
 } else {

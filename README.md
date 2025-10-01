@@ -24,4 +24,5 @@ postgres?,
 pg,
 pg-format,
 dotenv,
+supertest
 

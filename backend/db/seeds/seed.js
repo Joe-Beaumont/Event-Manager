@@ -1,9 +1,6 @@
 const db = require("../connection");
 const format = require("pg-format");
 
-
-//Need to fill in table names and data variable params
-// Split create and populate queries into functions
 const seed = ({ userData, eventData, attendingData }) => {
     return db.query("DROP TABLE IF EXISTS attending;")
     .then(() => {
@@ -55,7 +52,7 @@ function createEvents (){
 function createAttending (){
     return db.query(`CREATE TABLE attending (
         attending_id SERIAL PRIMARY KEY,
-        event_id INT REFERENCES events(event_id),
+        event_id INT REFERENCES events(event_id) ON DELETE CASCADE,
         user_id INT REFERENCES users(user_id)
         );`)
 }
