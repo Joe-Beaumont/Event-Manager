@@ -2,7 +2,7 @@ const { fetchUser, insertUser } = require("../models/user.model");
 
 exports.getUser = (req, res, next) => {
     const { user_id } = req.params
-    const regex = /\d/
+    const regex = /^\d+$/;
     if(!regex.test(user_id)) {
        return res.status(400).send({ msg: "Invalid User" }) 
     }

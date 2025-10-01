@@ -52,7 +52,7 @@ function createEvents (){
 function createAttending (){
     return db.query(`CREATE TABLE attending (
         attending_id SERIAL PRIMARY KEY,
-        event_id INT REFERENCES events(event_id),
+        event_id INT REFERENCES events(event_id) ON DELETE CASCADE,
         user_id INT REFERENCES users(user_id)
         );`)
 }

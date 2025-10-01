@@ -8,6 +8,8 @@ require("jest-sorted");
 beforeEach(() => seed(data));
 afterAll(() => db.end());
 
+//api/events
+
 describe("GET /api/events", () => {
     test("200: responds with an array of events", () => {
         return request(app)
@@ -25,41 +27,6 @@ describe("GET /api/events", () => {
                 expect(event).toHaveProperty('time');
                 expect(event).toHaveProperty('created_by');
             });
-        });
-    });
-});
-
-describe("GET /api/events/:event_id", () => {
-    test("200: responds with an object for a specific event", () => {
-        return request(app)
-        .get("/api/events/3")
-        .expect(200)
-        .then(({ body }) => {
-            const { event } = body
-            expect(event.event_id).toBe(3);
-            expect(event.name).toBe('Cloud Computing Bootcamp');
-            expect(event.description).toBe('Hands-on AWS, Azure, GCP labs');
-            expect(event.date).toBe('2025-06-07');
-            expect(event.time).toBe('11:00:00');
-            expect(event.created_by).toBe(1);
-        });
-    });
-    test("404: if event does not exist", () => {
-        return request(app)
-        .get("/api/events/999")
-        .expect(404)
-        .then(({ body }) => {
-            const { msg } = body
-            expect(msg).toBe("No events with that id");
-        });
-    });
-    test("400: invalid event_id", () => {
-        return request(app)
-        .get("/api/events/abc")
-        .expect(400)
-        .then(({ body }) => {
-            const { msg } = body
-            expect(msg).toBe("Invalid event_id")
         });
     });
 });
@@ -216,39 +183,143 @@ describe("POST /api/events", () => {
     });
 });
 
+//api/events/:event_id
 
-describe("GET /api/users/:user_id", () => {
-    test("200: responds with an object for a specific user", () => {
+describe("GET /api/events/:event_id", () => {
+    test("200: responds with an object for a specific event", () => {
         return request(app)
-        .get("/api/users/3")
+        .get("/api/events/3")
         .expect(200)
         .then(({ body }) => {
-            const { user } = body
-            expect(user.user_id).toBe(3);
-            expect(user.email).toBe('charlie@example.com');
-            expect(user.password).toBe('$2b$10$Ljw9q9sFf0A8RkQ7YwF8Ru7aG0W9P3pE7uS5rFfLq0Cz1O');
-            expect(user.role).toBe('member');
+            const { event } = body
+            expect(event.event_id).toBe(3);
+            expect(event.name).toBe('Cloud Computing Bootcamp');
+            expect(event.description).toBe('Hands-on AWS, Azure, GCP labs');
+            expect(event.date).toBe('2025-06-07');
+            expect(event.time).toBe('11:00:00');
+            expect(event.created_by).toBe(1);
         });
     });
-    test("404: if user does not exist", () => {
+    test("400: invalid event_id", () => {
         return request(app)
-        .get("/api/users/999")
-        .expect(404)
-        .then(({ body }) => {
-            const { msg } = body
-            expect(msg).toBe("Invalid User");
-        });
-    });
-    test("400: if user_id is invalid", () => {
-        return request(app)
-        .get("/api/users/not-an-id")
+        .get("/api/events/abc")
         .expect(400)
         .then(({ body }) => {
             const { msg } = body
-            expect(msg).toBe("Invalid User");
+            expect(msg).toBe("Invalid event_id")
+        });
+    });
+    test("404: if event does not exist", () => {
+        return request(app)
+        .get("/api/events/999")
+        .expect(404)
+        .then(({ body }) => {
+            const { msg } = body
+            expect(msg).toBe("No events with that id");
         });
     });
 });
+
+describe("PATCH /events/:event_id", () => {
+    test("201: if event is updated with a new date successfully", () => {
+        return request(app)
+        .patch("/api/events/3")
+        .send({ date : "2025-10-01" })
+        .expect(201)
+        .then(({ body }) => {
+            const date = body.event.date;
+            expect(date).toBe("2025-10-01")
+        });
+    });
+    test("201: if event is updated with a new time successfully", () => {
+        return request(app)
+        .patch("/api/events/3")
+        .send({ time : "13:00" })
+        .expect(201)
+        .then(({ body }) => {
+            const time = body.event.time;
+            expect(time).toBe("13:00:00")
+        });
+    });
+    test("201: if event is updated with a new name successfully", () => {
+        return request(app)
+        .patch("/api/events/3")
+        .send({ name : "Patched_Event" })
+        .expect(201)
+        .then(({ body }) => {
+            const name = body.event.name;
+            expect(name).toBe("Patched_Event")
+        });
+    });
+    test("201: if event is updated with a new description successfully", () => {
+        return request(app)
+        .patch("/api/events/3")
+        .send({ description : "Patched_Event_Description" })
+        .expect(201)
+        .then(({ body }) => {
+            const description = body.event.description;
+            expect(description).toBe("Patched_Event_Description")
+        });
+    });
+    test("400: if date is invalid", () => {
+        return request(app)
+        .patch("/api/events/3")
+        .send({ date : "not-a-date" })
+        .expect(400)
+        .then(({ body }) => {
+            const { msg } = body;
+            expect(msg).toBe("Invalid date")
+        });
+    });
+    test("400: if time is invalid", () => {
+        return request(app)
+        .patch("/api/events/3")
+        .send({ time : "not-a-time" })
+        .expect(400)
+        .then(({ body }) => {
+            const { msg } = body;
+            expect(msg).toBe("Invalid time")
+        });
+    });
+    test("404: if event does not exist", () => {
+        return request(app)
+        .patch("/api/events/999")
+        .send({ name : "404_test" })
+        .expect(404)
+        .then(({ body }) => {
+            const { msg } = body
+            expect(msg).toBe("No events with that id");
+        });
+    });
+});
+
+describe("DELETE /api/events/:event_id", () => {
+    test("deletes given event by event_id", () => {
+        return request(app)
+        .delete("/api/events/4")
+        .expect(204)
+    });
+    test("returns 404 if event_id valid but doesn't exist", () => {
+        return request(app)
+        .delete("/api/events/999")
+        .expect(404)
+        .then(({ body }) => {
+        const { msg } = body
+        expect(msg).toBe("No events with that id")
+        });
+    });
+    test("returns 400 if event_id not valid", () => {
+        return request(app)
+        .delete("/api/events/notAnID")
+        .expect(400)
+        .then(({ body }) => {
+        const { msg } = body
+        expect(msg).toBe("Invalid event_id")
+        });
+    });
+});
+
+//api/users
 
 describe("POST /users", () => {
     test("201: posts new user", () => {
@@ -339,3 +410,39 @@ describe("POST /users", () => {
         });
     });
 });
+
+//api/users/:user_id
+
+describe("GET /api/users/:user_id", () => {
+    test("200: responds with an object for a specific user", () => {
+        return request(app)
+        .get("/api/users/3")
+        .expect(200)
+        .then(({ body }) => {
+            const { user } = body
+            expect(user.user_id).toBe(3);
+            expect(user.email).toBe('charlie@example.com');
+            expect(user.password).toBe('$2b$10$Ljw9q9sFf0A8RkQ7YwF8Ru7aG0W9P3pE7uS5rFfLq0Cz1O');
+            expect(user.role).toBe('member');
+        });
+    });
+    test("404: if user does not exist", () => {
+        return request(app)
+        .get("/api/users/999")
+        .expect(404)
+        .then(({ body }) => {
+            const { msg } = body
+            expect(msg).toBe("Invalid User");
+        });
+    });
+    test("400: if user_id is invalid", () => {
+        return request(app)
+        .get("/api/users/not-an-id")
+        .expect(400)
+        .then(({ body }) => {
+            const { msg } = body
+            expect(msg).toBe("Invalid User");
+        });
+    });
+});
+
