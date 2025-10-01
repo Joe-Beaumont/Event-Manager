@@ -22,3 +22,17 @@ exports.insertEvent = (name, description, date, time, created_by) => {
             return {event: rows[0]}
         });
 };
+
+exports.updateEvent = (patchString, patchFields) => {
+    return db.query(patchString, patchFields)
+    .then(({ rows }) => {
+        return {event: rows[0]}
+    });
+};
+
+exports.deleteEvent = (event_id) => {
+    return db.query(`DELETE FROM events WHERE event_id = $1`, [event_id])
+    .then(() => {
+        return
+    });
+}

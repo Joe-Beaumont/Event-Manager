@@ -12,8 +12,16 @@ exports.insertUser = (email, password, role) => {
         VALUES %L RETURNING *`,
         [[email, password, role]]
     );
-    return db.query(newUser)
+    return db.query(`SELECT * FROM users WHERE email = $1`, [email])
     .then(({ rows }) => {
-        return {user: rows[0]}
-    });
+        if(rows.length > 0){
+            return Promise.reject({ status: 400, msg: "Email already exists" })
+        }
+    })
+    .then(() => {
+        return db.query(newUser)
+        .then(({ rows }) => {
+            return {user: rows[0]}
+        });
+    })
 };

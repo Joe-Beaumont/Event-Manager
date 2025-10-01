@@ -3,9 +3,8 @@ const app = express();
 const cors = require("cors");
 const db = require("./db/connection");
 const { handle404, handlePostgresErrors, handleCustomErrors, handleServerErrors } = require("./controllers/error.controller");
-const { getEvents, getEvent, postEvent } = require("./controllers/event.controller");
+const { getEvents, getEvent, postEvent, patchEvent, cancelEvent } = require("./controllers/event.controller");
 const { getUser, postUser } = require("./controllers/user.controller");
-const format = require("pg-format");
 
 app.use(cors());
 app.use(express.json());
@@ -26,7 +25,9 @@ app.get("/api/events", getEvents);
 // GET /events/:id
 app.get("/api/events/:event_id", getEvent);
 // PATCH /events/:id
+app.patch("/api/events/:event_id", patchEvent);
 // DELETE /events/:id
+app.delete("/api/events/:event_id", cancelEvent);
 
 // Attending endpoints
 // POST /events/:id/attend
@@ -34,7 +35,7 @@ app.get("/api/events/:event_id", getEvent);
 // GET /events/:id/attendees
 
 // Error Handling middleware
-// app.all("*", handle404);
+app.all(/.*/, handle404);
 
 app.use(handlePostgresErrors);
 
