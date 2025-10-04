@@ -562,10 +562,10 @@ describe("DELETE /events/:event_id/attend", () => {
 
 //api/events/:event_id/attendees
 
-describe("GET /events/:event_id/attendees", () => {
+describe("GET /events/:event_id/attend/users", () => {
     test("200: responds with an array of users", () => {
         return request(app)
-            .get("/api/events/4/attendees")
+            .get("/api/events/4/attend/users")
             .expect(200)
             .then(({ body }) => {
                 const { attending } = body
@@ -581,15 +581,15 @@ describe("GET /events/:event_id/attendees", () => {
     });
     test("400: responds with 'Invalid event_id' when event_id is not a number", () => {
         return request(app)
-            .get("/api/events/not-a-number/attendees")
+            .get("/api/events/not-a-number/attend/users")
             .expect(400)
             .then(({ body }) => {
                 expect(body.msg).toBe("Invalid event_id");
             });
     });
-    test("404: responds with 'No users attending this event' when event has no attendees", () => {
+    test("404: responds with 'No users attending this event' when event has no users", () => {
         return request(app)
-            .get("/api/events/9/attendees")
+            .get("/api/events/9/attend/users")
             .expect(404)
             .then(({ body }) => {
                 expect(body.msg).toBe("No users attending this event");
@@ -597,7 +597,7 @@ describe("GET /events/:event_id/attendees", () => {
     });
     test("404: responds with 'No users attending this event' when event_id does not exist", () => {
         return request(app)
-            .get("/api/events/999/attendees")
+            .get("/api/events/999/attend/users")
             .expect(404)
             .then(({ body }) => {
                 expect(body.msg).toBe("No events with that id");
