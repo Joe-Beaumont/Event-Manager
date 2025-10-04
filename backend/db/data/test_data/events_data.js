@@ -49,18 +49,18 @@ module.exports = [
     "created_by": 1
   },
   {
-    "name": "Data Science with Python",
-    "description": "Pandas, NumPy, and ML models in Python",
-    "date": "2025-06-28",
-    "time": "10:30",
-    "created_by": 2
-  },
-  {
     "name": "Advanced JavaScript Meetup",
     "description": "Deep dive into ESNext and Node.js performance",
     "date": "2025-07-02",
     "time": "18:00",
     "created_by": 1
+  },
+  {
+    "name": "Data Science with Python",
+    "description": "Pandas, NumPy, and ML models in Python",
+    "date": "2025-06-28",
+    "time": "10:30",
+    "created_by": 2
   },
   {
     "name": "Closing Keynote: Future Tech",
