@@ -5,6 +5,8 @@ const db = require("./db/connection");
 const { handle404, handlePostgresErrors, handleCustomErrors, handleServerErrors } = require("./controllers/error.controller");
 const { getEvents, getEvent, postEvent, patchEvent, cancelEvent } = require("./controllers/event.controller");
 const { getUser, postUser } = require("./controllers/user.controller");
+const { postAttending, cancelAttending, getAttending } = require("./controllers/attending.controller");
+
 
 app.use(cors());
 app.use(express.json());
@@ -31,8 +33,15 @@ app.delete("/api/events/:event_id", cancelEvent);
 
 // Attending endpoints
 // POST /events/:id/attend
+
+app.post("/api/events/:event_id/attend", postAttending);
+
 // DELETE /events/:id/attend
+
+app.delete("/api/events/:event_id/attend", cancelAttending);
+
 // GET /events/:id/attendees
+app.get("/api/events/:event_id/attendees", getAttending);
 
 // Error Handling middleware
 app.all(/.*/, handle404);
