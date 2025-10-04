@@ -70,4 +70,4 @@ exports.getAttending = (req, res, next) => {
             res.status(200).send({ attending: users });
         })
         .catch(next);
-}
+};
