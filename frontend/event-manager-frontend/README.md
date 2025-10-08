@@ -26,3 +26,5 @@ pg-format,
 dotenv,
 supertest
 
+packages installed for frontend:
+axios
