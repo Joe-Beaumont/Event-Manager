@@ -1,5 +1,13 @@
-import EventsList from "./components/EventsList";
+import { Header } from "./components/Header"
+import { Nav } from "./components/Nav"
+import { Content } from "./components/Content"
 
 export default function App() {
-  return <div><EventsList /></div>
+  return(
+    <div>
+        <Header />
+        <Nav />
+        <Content />
+    </div>
+  ) 
 }
