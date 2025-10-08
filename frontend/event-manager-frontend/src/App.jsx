@@ -1,3 +1,5 @@
+import EventsList from "./components/EventsList";
+
 export default function App() {
-  return <h1>Hello Events Platform</h1>
+  return <div><EventsList /></div>
 }
