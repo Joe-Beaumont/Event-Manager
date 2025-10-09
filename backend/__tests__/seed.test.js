@@ -128,30 +128,30 @@ describe('creating tables', () => {
                 expect(column.data_type).toBe('text');
             });
         });
-        test('events table contains date as date', () => {
+        test('events table contains start_time as timestamp', () => {
             return db
             .query(
                 `SELECT *
                     FROM information_schema.columns
                     WHERE table_name = 'events'
-                    AND column_name = 'date';`
+                    AND column_name = 'start_time';`
             )
             .then(({ rows: [column] }) => {
-                expect(column.column_name).toBe('date');
-                expect(column.data_type).toBe('date');
+                expect(column.column_name).toBe('start_time');
+                expect(column.data_type).toBe('timestamp without time zone');
             });
         });
-        test('events table contains time as time', () => {
+        test('events table contains end_time as timestamp', () => {
             return db
             .query(
                 `SELECT *
                     FROM information_schema.columns
                     WHERE table_name = 'events'
-                    AND column_name = 'time';`
+                    AND column_name = 'end_time';`
             )
             .then(({ rows: [column] }) => {
-                expect(column.column_name).toBe('time');
-                expect(column.data_type).toBe('time without time zone');
+                expect(column.column_name).toBe('end_time');
+                expect(column.data_type).toBe('timestamp without time zone');
             });
         });
         test('events table contains created_by as integer', () => {
@@ -165,6 +165,32 @@ describe('creating tables', () => {
             .then(({ rows: [column] }) => {
                 expect(column.column_name).toBe('created_by');
                 expect(column.data_type).toBe('integer');
+            });
+        });
+        test('events table contains google_event_id as text', () => {
+            return db
+            .query(
+                `SELECT *
+                    FROM information_schema.columns
+                    WHERE table_name = 'events'
+                    AND column_name = 'google_event_id';`
+            )
+            .then(({ rows: [column] }) => {
+                expect(column.column_name).toBe('google_event_id');
+                expect(column.data_type).toBe('text');
+            });
+        });
+        test('events table contains image_url as text', () => {
+            return db
+            .query(
+                `SELECT *
+                    FROM information_schema.columns
+                    WHERE table_name = 'events'
+                    AND column_name = 'image_url';`
+            )
+            .then(({ rows: [column] }) => {
+                expect(column.column_name).toBe('image_url');
+                expect(column.data_type).toBe('text');
             });
         });
     });
@@ -242,14 +268,16 @@ describe('populating tables', () => {
         return db
         .query(`SELECT * FROM events;`)
         .then(( {rows: events }) => {
-            expect(events).toHaveLength(10);
+            expect(events).toHaveLength(20);
             events.forEach((event) => {
                 expect(event).toHaveProperty('event_id');
                 expect(event).toHaveProperty('name');
                 expect(event).toHaveProperty('description');
-                expect(event).toHaveProperty('date');
-                expect(event).toHaveProperty('time');
+                expect(event).toHaveProperty('start_time');
+                expect(event).toHaveProperty('end_time');
                 expect(event).toHaveProperty('created_by');
+                expect(event).toHaveProperty('google_event_id');
+                expect(event).toHaveProperty('image_url');                
             });
         });
     });

@@ -43,9 +43,11 @@ function createEvents() {
         event_id SERIAL PRIMARY KEY,
         name TEXT NOT NULL,
         description TEXT NOT NULL,
-        date DATE NOT NULL,
-        time TIME NOT NULL,
-        created_by INT REFERENCES users(user_id)
+        start_time TIMESTAMP NOT NULL,
+        end_time TIMESTAMP NOT NULL,
+        created_by INT REFERENCES users(user_id),
+        google_event_id TEXT,
+        image_url TEXT
         );`)
 }
 
@@ -74,11 +76,11 @@ function populateUsers(userData) {
 
 function populateEvents(eventData) {
     const mappedEvents = eventData.map((event) => {
-        return [event.name, event.description, event.date, event.time, event.created_by]
+        return [event.name, event.description, event.start_time, event.end_time, event.created_by, event.google_event_id, event.image_url]
     });
     const insertEvents = format(
         `INSERT INTO events
-        (name, description, date, time, created_by)
+        (name, description, start_time, end_time, created_by, google_event_id, image_url)
         VALUES %L
         RETURNING *;`,
         mappedEvents
