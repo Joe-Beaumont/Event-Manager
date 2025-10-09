@@ -25,3 +25,9 @@ exports.insertUser = (email, password, role) => {
                 });
         })
 };
+
+exports.fetchUserByEmail = (email) => {
+    return db
+        .query(`SELECT * FROM users WHERE email = $1`, [email])
+        .then(({ rows }) => rows[0]);
+}
