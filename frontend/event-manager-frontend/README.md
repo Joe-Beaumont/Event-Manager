@@ -28,4 +28,4 @@ supertest
 
 packages installed for frontend:
 axios
-react-router
+react-router-dom
