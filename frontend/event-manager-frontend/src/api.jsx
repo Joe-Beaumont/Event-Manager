@@ -31,6 +31,21 @@ export function getUser(user_id) {
         })
         .catch(handleError);
 };
+
+
+// login
+
+export function loginUser(email, password) {
+  return axios.post(`${baseURL}users/login`, { email, password })
+    .then((response) => response.data.user)
+    .catch((error) => {
+      throw new Error(error.response?.data?.msg || "Login failed");
+    });
+}
+
+// register
+
+
 // // Event endpoints
 // // POST /events
 // app.post("/api/events", postEvent);
