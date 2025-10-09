@@ -328,7 +328,7 @@ describe("POST /users", () => {
             .post("/api/users")
             .send({
                 email: "test@email.com",
-                password: "test_password",
+                password: "Password123",
                 role: "staff"
             })
             .expect(201)
@@ -336,7 +336,7 @@ describe("POST /users", () => {
                 const { user } = body
                 expect(user.user_id).toBe(11);
                 expect(user.email).toBe('test@email.com');
-                expect(user.password).toBe('test_password');
+                expect(user.password).toBe('Password123');
                 expect(user.role).toBe('staff');
             });
     });
@@ -345,7 +345,7 @@ describe("POST /users", () => {
             .post("/api/users")
             .send({
                 email: "",
-                password: "test_password",
+                password: "Password123",
                 role: "staff"
             })
             .expect(400)
@@ -373,7 +373,7 @@ describe("POST /users", () => {
             .post("/api/users")
             .send({
                 email: "test@email.com",
-                password: "test_password",
+                password: "Password123",
                 role: ""
             })
             .expect(400)
@@ -387,7 +387,7 @@ describe("POST /users", () => {
             .post("/api/users")
             .send({
                 email: "test@email.com",
-                password: "test_password",
+                password: "Password123",
                 role: "not-a-role"
             })
             .expect(400)
@@ -401,13 +401,59 @@ describe("POST /users", () => {
             .post("/api/users")
             .send({
                 email: "alice.staff@example.com",
-                password: "test_password",
+                password: "Password123",
                 role: "staff"
             })
             .expect(400)
             .then(({ body }) => {
                 const { msg } = body;
                 expect(msg).toBe("Email already exists")
+            });
+    });
+});
+
+// Login
+
+describe("POST /api/users/login", () => {
+    test("200: responds with a user object when valid credentials are provided", () => {
+        return request(app)
+            .post("/api/users/login")
+            .send({ email: "alice.staff@example.com", password: "password123" })
+            .expect(200)
+            .then(({ body }) => {
+                expect(body.user).toBeInstanceOf(Object);
+                expect(body.user).toHaveProperty("email", "alice.staff@example.com");
+                expect(body.user).toHaveProperty("role");
+            });
+    });
+
+    test("404: responds with 'User not found' when the email does not exist", () => {
+        return request(app)
+            .post("/api/users/login")
+            .send({ email: "missing@example.com", password: "password123" })
+            .expect(404)
+            .then(({ body }) => {
+                expect(body.msg).toBe("User not found");
+            });
+    });
+
+    test("401: responds with 'Invalid credentials' when the password is incorrect", () => {
+        return request(app)
+            .post("/api/users/login")
+            .send({ email: "alice.staff@example.com", password: "wrongpassword" })
+            .expect(401)
+            .then(({ body }) => {
+                expect(body.msg).toBe("Invalid credentials");
+            });
+    });
+
+    test("400: responds with a custom error if email or password is missing", () => {
+        return request(app)
+            .post("/api/users/login")
+            .send({ email: "alice.staff@example.com" })
+            .expect(400)
+            .then(({ body }) => {
+                expect(body.msg).toBe("Email and password required");
             });
     });
 });
@@ -423,7 +469,7 @@ describe("GET /api/users/:user_id", () => {
                 const { user } = body
                 expect(user.user_id).toBe(3);
                 expect(user.email).toBe('charlie@example.com');
-                expect(user.password).toBe('$2b$10$Ljw9q9sFf0A8RkQ7YwF8Ru7aG0W9P3pE7uS5rFfLq0Cz1O');
+                expect(user.password).toBe('password123');
                 expect(user.role).toBe('member');
             });
     });
@@ -573,7 +619,7 @@ describe("GET /events/:event_id/attend/users", () => {
                 expect(attending.length).toBe(1);
                 attending.forEach((attendance) => {
                     expect(attendance.email).toBe('helen@example.com');
-                    expect(attendance.password).toBe('$2b$10$J6qL8mT4sV9rP0zK3yW7oX2uH5nE4cR8dG1aB2pM7vF6tQ');
+                    expect(attendance.password).toBe('password123');
                     expect(attendance.role).toBe('member');
                     expect(attendance.user_id).toBe(8);
                 });
