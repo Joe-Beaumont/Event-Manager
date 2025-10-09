@@ -18,15 +18,17 @@ describe("GET /api/events", () => {
             .then(({ body }) => {
                 const { events } = body
                 expect(Array.isArray(events)).toBe(true);
-                expect(events.length).toBe(10);
-                expect(events).toBeSortedBy('date', { descending: false })
+                expect(events.length).toBe(20);
+                expect(events).toBeSortedBy('start_time', { descending: false })
                 events.forEach((event) => {
                     expect(event).toHaveProperty('event_id');
                     expect(event).toHaveProperty('name');
                     expect(event).toHaveProperty('description');
-                    expect(event).toHaveProperty('date');
-                    expect(event).toHaveProperty('time');
+                    expect(event).toHaveProperty('start_time');
+                    expect(event).toHaveProperty('end_time');
                     expect(event).toHaveProperty('created_by');
+                    expect(event).toHaveProperty('google_event_id');
+                    expect(event).toHaveProperty('image_url');
                 });
             });
     });
@@ -37,32 +39,38 @@ describe("POST /api/events", () => {
         return request(app)
             .post("/api/events")
             .send({
-                name: "Test_Event",
-                description: "Test_Event",
-                date: "2025-09-30",
-                time: "12:00",
-                created_by: 1
+                name: "Test Event",
+                description: "Test Event",
+                start_time: "2025-11-12T10:00:00",
+                end_time: "2025-11-12T16:00:00",
+                created_by: 1,
+                google_event_id: null,
+                image_url: "https://picsum.photos/seed/ev2/600/400"
             })
             .expect(201)
             .then(({ body }) => {
                 const { event } = body
-                expect(event.event_id).toBe(11);
-                expect(event.name).toBe('Test_Event');
-                expect(event.description).toBe('Test_Event');
-                expect(event.date).toBe('2025-09-30');
-                expect(event.time).toBe('12:00:00');
+                expect(event.event_id).toBe(21);
+                expect(event.name).toBe('Test Event');
+                expect(event.description).toBe('Test Event');
+                expect(event.start_time).toBe('2025-11-12T10:00:00.000Z');
+                expect(event.end_time).toBe('2025-11-12T16:00:00.000Z');
                 expect(event.created_by).toBe(1);
+                expect(event.google_event_id).toBe(null);
+                expect(event.image_url).toBe("https://picsum.photos/seed/ev2/600/400");
             });
     });
     test("400: if user doesn't exist", () => {
         return request(app)
             .post("/api/events")
             .send({
-                name: "Test_Event",
-                description: "Test_Event",
-                date: "2025-09-30",
-                time: "12:00",
-                created_by: 999
+                name: "Test Event",
+                description: "Test Event",
+                start_time: "2025-11-12T10:00:00",
+                end_time: "2025-11-12T16:00:00",
+                created_by: 999,
+                google_event_id: null,
+                image_url: "https://picsum.photos/seed/ev2/600/400"
             })
             .expect(400)
             .then(({ body }) => {
@@ -75,10 +83,12 @@ describe("POST /api/events", () => {
             .post("/api/events")
             .send({
                 name: "",
-                description: "Test_Event",
-                date: "2025-09-30",
-                time: "12:00",
-                created_by: 2
+                description: "Test Event",
+                start_time: "2025-11-12T10:00:00",
+                end_time: "2025-11-12T16:00:00",
+                created_by: 1,
+                google_event_id: null,
+                image_url: "https://picsum.photos/seed/ev2/600/400"
             })
             .expect(400)
             .then(({ body }) => {
@@ -90,11 +100,13 @@ describe("POST /api/events", () => {
         return request(app)
             .post("/api/events")
             .send({
-                name: "Test_Event",
+                name: "Test Event",
                 description: "",
-                date: "2025-09-30",
-                time: "12:00",
-                created_by: 2
+                start_time: "2025-11-12T10:00:00",
+                end_time: "2025-11-12T16:00:00",
+                created_by: 1,
+                google_event_id: null,
+                image_url: "https://picsum.photos/seed/ev2/600/400"
             })
             .expect(400)
             .then(({ body }) => {
@@ -102,15 +114,17 @@ describe("POST /api/events", () => {
                 expect(msg).toBe("Missing required field(s)")
             });
     });
-    test("400: if missing required date", () => {
+    test("400: if missing required start_time", () => {
         return request(app)
             .post("/api/events")
             .send({
-                name: "Test_Event",
-                description: "Test_Event",
-                date: "",
-                time: "12:00",
-                created_by: 2
+                name: "Test Event",
+                description: "Test Event",
+                start_time: "",
+                end_time: "2025-11-12T16:00:00",
+                created_by: 1,
+                google_event_id: null,
+                image_url: "https://picsum.photos/seed/ev2/600/400"
             })
             .expect(400)
             .then(({ body }) => {
@@ -118,15 +132,17 @@ describe("POST /api/events", () => {
                 expect(msg).toBe("Missing required field(s)")
             });
     });
-    test("400: if missing required time", () => {
+    test("400: if missing required end_time", () => {
         return request(app)
             .post("/api/events")
             .send({
-                name: "Test_Event",
-                description: "Test_Event",
-                date: "2025-09-30",
-                time: "",
-                created_by: 2
+                name: "Test Event",
+                description: "Test Event",
+                start_time: "2025-11-12T10:00:00",
+                end_time: "",
+                created_by: 1,
+                google_event_id: null,
+                image_url: "https://picsum.photos/seed/ev2/600/400"
             })
             .expect(400)
             .then(({ body }) => {
@@ -134,47 +150,53 @@ describe("POST /api/events", () => {
                 expect(msg).toBe("Missing required field(s)")
             });
     });
-    test("400: if invalid date", () => {
+    test("400: if invalid start_time", () => {
         return request(app)
             .post("/api/events")
             .send({
-                name: "Test_Event",
-                description: "Test_Event",
-                date: "not-a-date",
-                time: "12:00",
-                created_by: 2
+                name: "Test Event",
+                description: "Test Event",
+                start_time: "not-a-timestamp",
+                end_time: "2025-11-12T16:00:00",
+                created_by: 1,
+                google_event_id: null,
+                image_url: "https://picsum.photos/seed/ev2/600/400"
             })
             .expect(400)
             .then(({ body }) => {
                 const { msg } = body;
-                expect(msg).toBe("Invalid date")
+                expect(msg).toBe("Invalid start time")
             });
     });
-    test("400: if invalid time", () => {
+    test("400: if invalid end_time", () => {
         return request(app)
             .post("/api/events")
             .send({
-                name: "Test_Event",
-                description: "Test_Event",
-                date: "2025-09-30",
-                time: "not-a-time",
-                created_by: 2
+                name: "Test Event",
+                description: "Test Event",
+                start_time: "2025-11-12T10:00:00",
+                end_time: "not-an-timestamp",
+                created_by: 1,
+                google_event_id: null,
+                image_url: "https://picsum.photos/seed/ev2/600/400"
             })
             .expect(400)
             .then(({ body }) => {
                 const { msg } = body;
-                expect(msg).toBe("Invalid time")
+                expect(msg).toBe("Invalid end time")
             });
     });
     test("400: invalid role", () => {
         return request(app)
             .post("/api/events")
             .send({
-                name: "Test_Event",
-                description: "Test_Event",
-                date: "2025-09-30",
-                time: "12:00",
-                created_by: 3
+                name: "Test Event",
+                description: "Test Event",
+                start_time: "2025-11-12T10:00:00",
+                end_time: "2025-11-12T16:00:00",
+                created_by: 3,
+                google_event_id: null,
+                image_url: "https://picsum.photos/seed/ev2/600/400"
             })
             .expect(400)
             .then(({ body }) => {
@@ -194,11 +216,13 @@ describe("GET /api/events/:event_id", () => {
             .then(({ body }) => {
                 const { event } = body
                 expect(event.event_id).toBe(3);
-                expect(event.name).toBe('Cloud Computing Bootcamp');
-                expect(event.description).toBe('Hands-on AWS, Azure, GCP labs');
-                expect(event.date).toBe('2025-06-07');
-                expect(event.time).toBe('11:00:00');
-                expect(event.created_by).toBe(1);
+                expect(event.name).toBe('Cloud Computing Workshop');
+                expect(event.description).toBe('Learn AWS, Azure, and GCP basics.');
+                expect(event.start_time).toBe('2025-11-15T13:00:00.000Z');
+                expect(event.end_time).toBe('2025-11-15T18:00:00.000Z');
+                expect(event.created_by).toBe(2);
+                expect(event.google_event_id).toBe(null);
+                expect(event.image_url).toBe('https://picsum.photos/seed/ev3/600/400');
             });
     });
     test("400: invalid event_id", () => {
@@ -221,75 +245,70 @@ describe("GET /api/events/:event_id", () => {
     });
 });
 
-describe("PATCH /events/:event_id", () => {
-    test("201: if event is updated with a new date successfully", () => {
+describe("PATCH /api/events/:event_id", () => {
+    test("201: updates event start_time successfully", () => {
         return request(app)
             .patch("/api/events/3")
-            .send({ date: "2025-10-01" })
+            .send({ start_time: "2025-11-15T09:00:00" })
             .expect(201)
             .then(({ body }) => {
-                const date = body.event.date;
-                expect(date).toBe("2025-10-01")
+                const { event } = body;
+                expect(event.start_time).toBe("2025-11-15T09:00:00.000Z");
             });
     });
-    test("201: if event is updated with a new time successfully", () => {
+    test("201: updates event end_time successfully", () => {
         return request(app)
             .patch("/api/events/3")
-            .send({ time: "13:00" })
+            .send({ end_time: "2025-11-15T18:00:00" })
             .expect(201)
             .then(({ body }) => {
-                const time = body.event.time;
-                expect(time).toBe("13:00:00")
+                const { event } = body;
+                expect(event.end_time).toBe("2025-11-15T18:00:00.000Z");
             });
     });
-    test("201: if event is updated with a new name successfully", () => {
+    test("201: updates event name successfully", () => {
         return request(app)
             .patch("/api/events/3")
-            .send({ name: "Patched_Event" })
+            .send({ name: "Updated_Event_Name" })
             .expect(201)
             .then(({ body }) => {
-                const name = body.event.name;
-                expect(name).toBe("Patched_Event")
+                expect(body.event.name).toBe("Updated_Event_Name");
             });
     });
-    test("201: if event is updated with a new description successfully", () => {
+    test("201: updates event description successfully", () => {
         return request(app)
             .patch("/api/events/3")
-            .send({ description: "Patched_Event_Description" })
+            .send({ description: "Updated event description" })
             .expect(201)
             .then(({ body }) => {
-                const description = body.event.description;
-                expect(description).toBe("Patched_Event_Description")
+                expect(body.event.description).toBe("Updated event description");
             });
     });
-    test("400: if date is invalid", () => {
+    test("400: invalid start_time format", () => {
         return request(app)
             .patch("/api/events/3")
-            .send({ date: "not-a-date" })
+            .send({ start_time: "not-a-timestamp" })
             .expect(400)
             .then(({ body }) => {
-                const { msg } = body;
-                expect(msg).toBe("Invalid date")
+                expect(body.msg).toBe("Invalid start_time");
             });
     });
-    test("400: if time is invalid", () => {
+    test("400: invalid end_time format", () => {
         return request(app)
             .patch("/api/events/3")
-            .send({ time: "not-a-time" })
+            .send({ end_time: "not-a-timestamp" })
             .expect(400)
             .then(({ body }) => {
-                const { msg } = body;
-                expect(msg).toBe("Invalid time")
+                expect(body.msg).toBe("Invalid end_time");
             });
     });
-    test("404: if event does not exist", () => {
+    test("404: event does not exist", () => {
         return request(app)
             .patch("/api/events/999")
-            .send({ name: "404_test" })
+            .send({ name: "Nonexistent Event" })
             .expect(404)
             .then(({ body }) => {
-                const { msg } = body
-                expect(msg).toBe("No events with that id");
+                expect(body.msg).toBe("No events with that id");
             });
     });
 });
