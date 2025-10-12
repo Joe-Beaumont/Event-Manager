@@ -26,15 +26,19 @@ exports.getEvent = (req, res, next) => {
 };
 
 exports.postEvent = (req, res, next) => {
-    const { name, description, date, time, created_by } = req.body;
-    const regexDate = /^\d{4}-\d{2}-\d{2}$/
-    const regexTime = /^\d{2}:\d{2}$/
-    if (!name || !description || !date || !time || !created_by)
-        return res.status(400).send({ msg: "Missing required field(s)" })
-    if (!regexDate.test(date))
-        return res.status(400).send({ msg: "Invalid date" })
-    if (!regexTime.test(time))
-        return res.status(400).send({ msg: "Invalid time" })
+    const { name, description, start_time, end_time, created_by, google_event_id, image_url } = req.body;
+  const regexTimestamp = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}$/;
+  if (!name || !description || !start_time || !end_time || !created_by) {
+    return res.status(400).send({ msg: "Missing required field(s)" });
+  }
+
+  if (!regexTimestamp.test(start_time)) {
+    return res.status(400).send({ msg: "Invalid start time" });
+  }
+
+  if (!regexTimestamp.test(end_time)) {
+    return res.status(400).send({ msg: "Invalid end time" });
+  }
     fetchUser(created_by)
         .then((user) => {
             if (!user) {
@@ -43,7 +47,7 @@ exports.postEvent = (req, res, next) => {
             if (user.role !== "staff") {
                 return Promise.reject({ status: 400, msg: "Only staff can create events" });
             }
-            return insertEvent(name, description, date, time, created_by)
+            return insertEvent(name, description, start_time, end_time, created_by, google_event_id, image_url)
         })
         .then((event) => {
             res.status(201).send(event)
@@ -53,14 +57,13 @@ exports.postEvent = (req, res, next) => {
 
 exports.patchEvent = (req, res, next) => {
     const { event_id } = req.params;
-    const { name, description, date, time } = req.body;
+    const { name, description, start_time, end_time } = req.body;
     fetchEvent(event_id)
         .then((event) => {
             if (!event) {
                 return Promise.reject({ status: 404, msg: "No events with that id" });
             }
-            const regexDate = /^\d{4}-\d{2}-\d{2}$/
-            const regexTime = /^\d{2}:\d{2}$/
+            const regexTimestamp = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}$/;
             const patchFields = [];
             let patchString = `UPDATE events e SET `;
             const setClauses = [];
@@ -74,20 +77,20 @@ exports.patchEvent = (req, res, next) => {
                 setClauses.push(`description = $${patchFields.length}`);
             }
 
-            if (date) {
-                if (!regexDate.test(date)) {
-                    return res.status(400).send({ msg: "Invalid date" });
+            if (start_time) {
+                if (!regexTimestamp.test(start_time)) {
+                    return res.status(400).send({ msg: "Invalid start_time" });
                 }
-                patchFields.push(date);
-                setClauses.push(`date = $${patchFields.length}`);
+                patchFields.push(start_time);
+                setClauses.push(`start_time = $${patchFields.length}`);
             }
 
-            if (time) {
-                if (!regexTime.test(time)) {
-                    return res.status(400).send({ msg: "Invalid time" });
+            if (end_time) {
+                if (!regexTimestamp.test(end_time)) {
+                    return res.status(400).send({ msg: "Invalid end_time" });
                 }
-                patchFields.push(time);
-                setClauses.push(`time = $${patchFields.length}`);
+                patchFields.push(end_time);
+                setClauses.push(`end_time = $${patchFields.length}`);
             }
             patchString += setClauses.join(", ");
             patchFields.push(event_id);
