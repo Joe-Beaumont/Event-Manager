@@ -10,6 +10,8 @@ app.use(express.json());
 
 const apiRouter = require("./routers/api.router")
 app.use("/api", apiRouter)
+const googleAuthRoutes = require("./routers/googleAuth.router");
+app.use("/auth", googleAuthRoutes);
 
 // Error Handling middleware
 
