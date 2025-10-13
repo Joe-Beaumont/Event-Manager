@@ -9,12 +9,8 @@ function handleError(error) {
     throw new Error(`Error: ${error.response?.data?.msg || error.message}`);
 }
 
-//Endpoints
-
 // User endpoints
 
-// // POST /users
-// app.post("/api/users", postUser);
 export function postUser(userData) {
     return axios.post(`${baseURL}users`, userData)
         .then((response) => {
@@ -22,12 +18,19 @@ export function postUser(userData) {
         })
         .catch(handleError)
 }
-// // GET /users/:id
-// app.get("/api/users/:user_id", getUser);
+
 export function getUser(user_id) {
     return axios.get(`${baseURL}users/${user_id}`)
         .then((response) => {
             return response.data.user
+        })
+        .catch(handleError);
+};
+
+export function getUserEvents(user_id) {
+    return axios.get(`${baseURL}users/${user_id}/events`)
+        .then((response) => {
+            return response.data.events
         })
         .catch(handleError);
 };
@@ -43,12 +46,9 @@ export function loginUser(email, password) {
     });
 }
 
-// register
 
+// Event endpoints
 
-// // Event endpoints
-// // POST /events
-// app.post("/api/events", postEvent);
 export function postEvent(eventData) {
     return axios.post(`${baseURL}events`, eventData)
         .then((response) => {
@@ -56,11 +56,6 @@ export function postEvent(eventData) {
         })
         .catch(handleError)
 }
-
-// // GET /events
-// app.get("/api/events", getEvents);
-// // GET /events/:id
-// app.get("/api/events/:event_id", getEvent);
 
 export function getEvents(event_id) {
     if (event_id) {
@@ -77,16 +72,11 @@ export function getEvents(event_id) {
             .catch(handleError);
     };
 };
-// // PATCH /events/:id
-// app.patch("/api/events/:event_id", patchEvent);
 
 export function patchEvent(event_id, updateData) {
     return axios.patch(`${baseURL}events/${event_id}`, updateData)
         .catch(handleError)
 }
-
-// // DELETE /events/:id
-// app.delete("/api/events/:event_id", cancelEvent);
 
 export function deleteEvent(event_id) {
     return axios.delete(`${baseURL}events/${event_id}`)
@@ -97,10 +87,7 @@ export function deleteEvent(event_id) {
         .catch(handleError)
 }
 
-// // Attending endpoints
-
-// // POST /events/:id/attend
-// app.post("/api/events/:event_id/attend", postAttending);
+// Attending endpoints
 
 export function postAttending(event_id, user_id) {
     return axios.post(`${baseURL}events/${event_id}/attend`, { user_id })
@@ -109,9 +96,6 @@ export function postAttending(event_id, user_id) {
         })
         .catch(handleError)
 }
-
-// // DELETE /events/:id/attend
-// app.delete("/api/events/:event_id/attend", cancelAttending);
 
 export function cancelAttending(event_id, user_id) {
     return axios.delete(`${baseURL}events/${event_id}/attend`, { data: { user_id } })
@@ -122,13 +106,19 @@ export function cancelAttending(event_id, user_id) {
         .catch(handleError)
 }
 
-// // GET /events/:id/attendees
-// app.get("/api/events/:event_id/attendees", getAttending);
-
 export function getAttendees(event_id) {
-    return axios.get(`${baseURL}events/${event_id}/attendees`)
-        .then((response) => {
-            return response.data.attending
-        })
-        .catch(handleError);
-};
+  return axios
+    .get(`${baseURL}events/${event_id}/attend/users`)
+    .then((response) => response.data.attending || [])
+    .catch(handleError);
+}
+
+export function checkUserRegistration(event_id, user_id) {
+  return axios
+    .get(`${baseURL}events/${event_id}/attend/users/${user_id}`)
+    .then((res) => res.data.registered)
+    .catch((err) => {
+      console.error("Error checking registration:", err);
+      return false;
+    });
+}

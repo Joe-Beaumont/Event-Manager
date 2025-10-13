@@ -28,3 +28,10 @@ exports.fetchAttending = (event_id) => {
             WHERE a.event_id = $1;`, [event_id])
         .then(({ rows }) => rows);
 }
+
+exports.fetchUserRegistration = (event_id, user_id) => {
+    return db.query(
+        `SELECT * FROM attending WHERE event_id = $1 AND user_id = $2;`,
+        [event_id, user_id])
+        .then(({ rows }) => rows);
+}

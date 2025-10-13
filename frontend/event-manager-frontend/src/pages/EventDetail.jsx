@@ -1,7 +1,9 @@
 import { useEffect, useState, useContext } from "react";
 import { useParams } from "react-router-dom";
-import { getEvents, postAttending } from "../api";
+import { getEvents, postAttending, cancelAttending } from "../api";
 import { CurrentUser } from "../contexts/UserContext";
+import Booking from "../components/Booking";
+import AttendanceCount from "../components/AttendanceCount";
 
 export default function EventDetail() {
   const { event_id } = useParams();
@@ -9,7 +11,6 @@ export default function EventDetail() {
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
   const [registered, setRegistered] = useState(false);
-  const [showCalendarOption, setShowCalendarOption] = useState(false);
 
   const { user } = useContext(CurrentUser);
 
@@ -29,25 +30,19 @@ export default function EventDetail() {
     try {
       await postAttending(event_id, user.user_id);
       setRegistered(true);
-      setShowCalendarOption(true);
     } catch (err) {
       alert(err.message);
     }
   };
 
-  const handleAddToCalendar = () => {
-  if (!user || !event) return;
-
-  const baseURL =
-    import.meta.env.MODE === "development"
-      ? "http://localhost:9090"
-      : "https://event-manager-5ow3.onrender.com";
-
-  window.location.href = `${baseURL}/auth/google?user_id=${user.user_id}&event_id=${event.event_id}`;
-};
-
-
-
+  const handleUnregister = async () => {
+    try {
+      await cancelAttending(event_id, user.user_id);
+      setRegistered(false);
+    } catch (err) {
+      alert(err.message);
+    }
+  };
 
   if (loading) return <p>Loading event...</p>;
   if (error) return <p style={{ color: "red" }}>{error}</p>;
@@ -61,15 +56,16 @@ export default function EventDetail() {
       <p>{new Date(event.end_time).toLocaleString()}</p>
       {event.image_url && <img src={event.image_url} alt={event.name} />}
 
-      {!registered && (
-        <button onClick={handleRegister}>Register for this event</button>
-      )}
-
-      {showCalendarOption && (
-        <button onClick={handleAddToCalendar}>
-          Add to Google Calendar
-        </button>
-      )}
+      <Booking
+        event={event}
+        user={user}
+        registered={registered}
+        onRegister={handleRegister}
+        onUnregister={handleUnregister}
+      />
+      <AttendanceCount
+        event_id={event_id}
+      />
     </div>
   );
 }

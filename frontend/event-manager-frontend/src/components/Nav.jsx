@@ -10,8 +10,10 @@ export function Nav() {
             <Link to="/">Home</Link>
             <Link to="/events">Upcoming Events</Link>
             <Link to="/users/1/events">My Events</Link>
-            <Link to="/events/create">Post New Event</Link>
-            
+            {user?.role === "staff" ? (
+                <Link to="/events/create">Post New Event</Link>
+            ) : null}
+
             {user ? (
                 <>
                     <span>Welcome, {user.email}</span>
@@ -20,8 +22,8 @@ export function Nav() {
             ) : (
                 <Link to="/users/login">Login</Link>
             )}
-            <Link to="/users/register">Register</Link> 
-           
+            <Link to="/users/register">Register</Link>
+
         </nav>
     );
 }

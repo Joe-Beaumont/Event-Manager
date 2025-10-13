@@ -12,18 +12,22 @@ export default function Login() {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        //temporary
         setError(null)
 
         loginUser(email, password)
             .then((user) => {
                 setUser(user);
-                navigate('/')
+                navigate(`/users/{user_id}/events`)
             })
             .catch((err) => {
                 setError(err.message);
             });
     };
+
+    const handleClick = () => {
+        navigate("/users/register");
+    };
+
     return (
         <div>
             <h2>Login</h2>
@@ -45,6 +49,13 @@ export default function Login() {
                     style={{ display: 'block', margin: '1rem auto', padding: '0.5rem', width: '100%' }}
                 />
                 <button type="submit" style={{ padding: '0.5rem 1rem' }}>Login</button>
+                <button
+                    type="button"
+                    style={{ padding: "0.5rem 1rem" }}
+                    onClick={handleClick}
+                >
+                    Sign Up
+                </button>
             </form>
         </div>
     )

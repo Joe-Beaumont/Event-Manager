@@ -8,5 +8,7 @@ attendingRouter.route('/')
 attendingRouter.route('/users')
 .get(attendingController.getAttending)
 
+attendingRouter.route('/users/:user_id')
+.get(attendingController.checkUserRegistration)
 
 module.exports = attendingRouter;

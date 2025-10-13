@@ -11,4 +11,7 @@ userRouter.route('/login')
 userRouter.route('/:user_id')
 .get(userController.getUser)
 
+userRouter.route('/:user_id/events')
+.get(userController.getUserEvents)
+
 module.exports = userRouter;

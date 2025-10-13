@@ -1,4 +1,4 @@
-const { attendEvent, deleteAttending, fetchAttending } = require("../models/attending.model");
+const { attendEvent, deleteAttending, fetchAttending, fetchUserRegistration } = require("../models/attending.model");
 const { fetchEvent } = require("../models/event.model")
 
 exports.postAttending = (req, res, next) => {
@@ -64,10 +64,23 @@ exports.getAttending = (req, res, next) => {
             return fetchAttending(event_id)
         })
         .then((users) => {
-            if (users.length === 0) {
-                return res.status(404).send({ msg: "No users attending this event" });
-            }
             res.status(200).send({ attending: users });
+        })
+        .catch(next);
+};
+
+exports.checkUserRegistration = (req, res, next) => {
+    const { event_id, user_id } = req.params;
+    const regex = /^\d+$/;
+    if (!regex.test(event_id)) {
+        return Promise.reject({ status: 400, msg: "Invalid event_id" });
+    };
+    if (!regex.test(user_id)) {
+        return Promise.reject({ status: 400, msg: "Invalid user_id" });
+    };
+    fetchUserRegistration(event_id, user_id)
+        .then((attending) => {
+            res.status(200).send({ registered: attending.length > 0 });
         })
         .catch(next);
 };

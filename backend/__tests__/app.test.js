@@ -512,6 +512,60 @@ describe("GET /api/users/:user_id", () => {
     });
 });
 
+//api/users/:user_id/events
+describe("GET /users/:user_id/events", () => {
+    test("200: responds with an array of events being attended by user", () => {
+        return request(app)
+            .get("/api/users/4/events")
+            .expect(200)
+            .then(({ body }) => {
+                const { events } = body
+                expect(Array.isArray(events)).toBe(true);
+                expect(events.length).toBe(2);
+                expect(events).toBeSortedBy('start_time', { descending: false })
+                expect(events[0].event_id).toBe(1);
+                expect(events[1].event_id).toBe(8);
+                events.forEach((event) => {
+                    expect(event).toHaveProperty('event_id');
+                    expect(event).toHaveProperty('name');
+                    expect(event).toHaveProperty('description');
+                    expect(event).toHaveProperty('start_time');
+                    expect(event).toHaveProperty('end_time');
+                    expect(event).toHaveProperty('created_by');
+                    expect(event).toHaveProperty('google_event_id');
+                    expect(event).toHaveProperty('image_url');
+                });
+            });
+    });
+    test("404: if user doesn't exist", () => {
+        return request(app)
+            .get("/api/users/999/events")
+            .expect(404)
+            .then(({ body }) => {
+                const { msg } = body;
+                expect(msg).toBe("No Events Found")
+            });
+    });
+    test("404: if user doesn't have any events", () => {
+        return request(app)
+            .get("/api/users/1/events")
+            .expect(404)
+            .then(({ body }) => {
+                const { msg } = body;
+                expect(msg).toBe("No Events Found")
+            });
+    });
+    test("400: if user_id is invalid", () => {
+        return request(app)
+            .get("/api/users/not-an-id/events")
+            .expect(400)
+            .then(({ body }) => {
+                const { msg } = body;
+                expect(msg).toBe("Invalid User")
+            });
+    });
+})
+
 //api/events/:id/attend
 describe("POST /events/:event_id/attend", () => {
     test("201: marks user as attending event", () => {
@@ -652,14 +706,6 @@ describe("GET /events/:event_id/attend/users", () => {
                 expect(body.msg).toBe("Invalid event_id");
             });
     });
-    test("404: responds with 'No users attending this event' when event has no users", () => {
-        return request(app)
-            .get("/api/events/9/attend/users")
-            .expect(404)
-            .then(({ body }) => {
-                expect(body.msg).toBe("No users attending this event");
-            });
-    });
     test("404: responds with 'No users attending this event' when event_id does not exist", () => {
         return request(app)
             .get("/api/events/999/attend/users")
@@ -670,3 +716,43 @@ describe("GET /events/:event_id/attend/users", () => {
     });
 });
 
+//api/events/:event_id/attending/:user_id
+
+describe("GET /events/:event_id/attend/users/:user_id", () => {
+  test("200: responds with { registered: true } when the user is attending", () => {
+    return request(app)
+      .get("/api/events/4/attend/users/8")
+      .expect(200)
+      .then(({ body }) => {
+        expect(body).toHaveProperty("registered");
+        expect(typeof body.registered).toBe("boolean");
+        expect(body.registered).toBe(true);
+      });
+  });
+  test("200: responds with { registered: false } when the user is not attending", () => {
+    return request(app)
+      .get("/api/events/4/attend/users/999")
+      .expect(200)
+      .then(({ body }) => {
+        expect(body).toHaveProperty("registered");
+        expect(typeof body.registered).toBe("boolean");
+        expect(body.registered).toBe(false);
+      });
+  });
+  test("400: responds with an error if event_id is invalid", () => {
+    return request(app)
+      .get("/api/events/notAnId/attend/users/8")
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.msg).toBe("Invalid event_id");
+      });
+  });
+    test("400: responds with an error if user_id is invalid", () => {
+    return request(app)
+      .get("/api/events/4/attend/users/notAnId")
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.msg).toBe("Invalid user_id");
+      });
+  });
+});

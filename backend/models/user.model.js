@@ -31,3 +31,11 @@ exports.fetchUserByEmail = (email) => {
         .query(`SELECT * FROM users WHERE email = $1`, [email])
         .then(({ rows }) => rows[0]);
 }
+
+exports.fetchUserEvents = (user_id) => {
+    return db
+    .query(`SELECT e.* FROM events e
+        JOIN attending a ON e.event_id = a.event_id
+        WHERE a.user_id = $1;`, [user_id])
+    .then(({ rows }) => rows);
+}

@@ -1,15 +1,15 @@
 import { Link } from 'react-router';
 
 export function EventCard({ event }) {
-    const { event_id, name, description, date, location } = event;
+    const { event_id } = event;
 
     return (
         <Link to={`/events/${event_id}`}>
             <div>
                 <h2>{event.name}</h2>
                 <p>{event.description}</p>
-                <p>{event.start_time}</p>
-                <p>{event.end_time}</p>
+                <p>{new Date(event.start_time).toLocaleString()}</p>
+                <p>{new Date(event.end_time).toLocaleString()}</p>
                 <img
                 src={event.image_url}
                 />

@@ -1,4 +1,4 @@
-const { fetchUser, insertUser, fetchUserByEmail } = require("../models/user.model");
+const { fetchUser, insertUser, fetchUserByEmail, fetchUserEvents } = require("../models/user.model");
 
 exports.getUser = (req, res, next) => {
     const { user_id } = req.params
@@ -68,3 +68,19 @@ exports.loginUser = (req, res, next) => {
         })
         .catch(next);
 };
+
+exports.getUserEvents = (req, res, next) => {
+    const { user_id } = req.params
+    const regex = /^\d+$/;
+    if (!regex.test(user_id)) {
+        return res.status(400).send({ msg: "Invalid User" })
+    }
+    fetchUserEvents(user_id)
+        .then((events) => {
+            if (events.length === 0) {
+                return res.status(404).send({ msg: "No Events Found" });
+            }
+            res.status(200).send({ events })
+        })
+        .catch(next);
+}
