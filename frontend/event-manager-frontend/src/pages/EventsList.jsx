@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
 import { getEvents } from "../api";
+import { EventCard } from "../cards/EventCard";
 
-export default function EventsList() {
+export default function EventsList({}) {
   const [events, setEvents] = useState([]);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -21,9 +22,9 @@ export default function EventsList() {
       <h2>Upcoming Events</h2>
       <ul>
         {events.map((event) => (
-          <li key={event.event_id}>
-            {event.name} - {event.date}
-          </li>
+          <div key={event.event_id}>
+            <EventCard event={event} />
+          </div>
         ))}
       </ul>
     </div>

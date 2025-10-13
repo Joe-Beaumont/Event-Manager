@@ -7,6 +7,7 @@ import ErrorMessage from '../components/ErrorMessage'
 import CreateEvent from '../pages/CreateEvent'
 import Login from '../pages/Login'
 import Register from '../pages/Register'
+import CalendarConnected from '../pages/CalendarConnected';
 
 
 export function Content() {
@@ -20,7 +21,8 @@ export function Content() {
                 <Route path="/users/login" element={<Login />} />
                 <Route path="/users/register" element={<Register />} />
                 <Route path="/users/:user_id/events" element={<MyEvents />} />
-                <Route path="/error" element={<ErrorMessage />} />                                                            
+                <Route path="/error" element={<ErrorMessage />} />
+                <Route path="/calendar-connected" element={<CalendarConnected />} />
             </Routes>
         </div>
     )

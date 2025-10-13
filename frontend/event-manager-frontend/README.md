@@ -29,3 +29,7 @@ supertest
 packages installed for frontend:
 axios
 react-router-dom
+@mui-x-date-pickers
+@emotion/react
+@emotion/styled
+@muidate-fns
