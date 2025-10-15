@@ -25,7 +25,7 @@ export default function Login() {
     };
 
     const handleClick = () => {
-        navigate("/users/register");
+        navigate("/users/register/member");
     };
 
     return (
