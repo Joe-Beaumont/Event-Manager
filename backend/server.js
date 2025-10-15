@@ -8,28 +8,28 @@ app.use(cors());
 app.use(express.json());
 
 // Routers
-
 const apiRouter = require("./routers/api.router")
 app.use("/api", apiRouter)
+
 const googleAuthRoutes = require("./routers/googleAuth.router");
 app.use("/auth", googleAuthRoutes);
 
+// Serve React frontend
+const frontendPath = path.join(__dirname, '../frontend/dist');
+app.use(express.static(frontendPath));
 
-app.use(express.static(path.join(__dirname, '../frontend/dist')));
-
+// Catch-all route for React
 app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, '../frontend/dist/index.html'));
+  // only serve index.html if the request is NOT for /api or /auth
+  if (req.path.startsWith('/api') || req.path.startsWith('/auth')) {
+    return handle404(req, res);
+  }
+  res.sendFile(path.join(frontendPath, 'index.html'));
 });
 
-
 // Error Handling middleware
-
-app.all(/.*/, handle404);
-
 app.use(handlePostgresErrors);
-
 app.use(handleCustomErrors);
-
 app.use(handleServerErrors);
 
 module.exports = app;
