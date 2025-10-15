@@ -4,7 +4,6 @@ export const CurrentUser = createContext();
 
 export const UserProvider = ({ children }) => {
   const [user, setUser] = useState(() => {
-    // Load user from localStorage on initial load
     const saved = localStorage.getItem("currentUser");
     return saved ? JSON.parse(saved) : null;
   });

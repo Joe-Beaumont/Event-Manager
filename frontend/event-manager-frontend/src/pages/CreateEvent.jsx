@@ -34,16 +34,20 @@ export default function CreateEvent() {
 
   return (
     <LocalizationProvider dateAdapter={AdapterDateFns}>
-      <div>
-        <h2>Create New Event</h2>
-        <form onSubmit={handleSubmit}>
+      <div className="form-container">
+        <h2 className="label">Create New Event</h2>
+        <form
+          className="form"
+          onSubmit={handleSubmit}>
           <input
+            className="input"
             name="name"
             placeholder="Event name"
             value={newEvent.name}
             onChange={handleChange}
           />
           <textarea
+            className="textarea"
             name="description"
             placeholder="Description"
             value={newEvent.description}
@@ -59,7 +63,9 @@ export default function CreateEvent() {
             value={newEvent.end_time}
             onChange={(value) => handleDateChange("end_time", value)}
           />
-          <button type="submit">Create</button>
+          <button
+          className="button"
+          type="submit">Create</button>
         </form>
       </div>
     </LocalizationProvider>

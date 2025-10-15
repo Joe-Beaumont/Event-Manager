@@ -1,42 +1,382 @@
-#root {
-  max-width: 1280px;
+/*  1. Global  */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+:root {
+  --primary-color: hsl(300, 80%, 27%);
+  --text-color: #1f2937;
+  --bg-color: #f9fafbbe;
+  --border-radius: 8px;
+  font-family: "Inter", sans-serif;
+}
+
+/*  2. Layout  */
+html, body {
+  width: 100%;
+  min-height: 100%;
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  line-height: 1.6;
+  font-size: 16px;
+  overflow-x: hidden;
+}
+
+.app-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  width: 100vw;
+  overflow-x: hidden;
+}
+
+/*  3. Header & Navigation  */
+.top-banner {
+  background-image: url("./Images/bannerX.jpg");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  width: 100%;
+  color: white;
+  padding: 1rem 2rem;
+}
+
+.topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  width: 100%;
+  flex-wrap: wrap;
+}
+
+.topbar > nav:first-of-type {
+  order: 2;
+  flex: 1;
+  justify-content: center;
+}
+.topbar > nav:last-of-type {
+  order: 1;
+}
+.topbar > div {
+  order: 3;
+}
+
+.heading {
+  color: white;
+  font-size: 2.2rem;
+  line-height: 1.2;
+  font-weight: 700;
+  text-align: right;
+  margin: 0;
+}
+
+/*  Nav & Login  */
+.nav {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+}
+
+.nav .nav-link {
+  text-decoration: none;
+  color: white;
+  background: rgba(255, 255, 255, 0.1);
+  padding: 0.6rem 1rem;
+  border-radius: 6px;
+  font-weight: 600;
+  transition: background 0.2s ease;
+}
+
+.nav .nav-link:hover {
+  background-color: rgba(255, 255, 255, 0.25);
+}
+
+.nav button.nav-link {
+  border: none;
+  background: rgba(255, 255, 255, 0.1);
+  cursor: pointer;
+}
+
+.greeting {
+  margin-right: 0.5rem;
+  font-weight: 500;
+}
+
+/*  4. Content Area  */
+.content {
+  flex-grow: 1;
+  min-height: calc(100vh - 200px);
+  width: 100%;
+  padding: 4rem 2rem;
+  background-color: #f0f4ff;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+}
+
+/*  5. Event List, Cards & Buttons  */
+.event-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1.5rem;
+  width: 100%;
+  margin: 2rem auto;
+  padding: 1rem;
+}
+
+.event-card {
+  background: white;
+  border-radius: var(--border-radius);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  padding: 1.5rem;
+  transition: transform 0.2s ease;
+  color: black;
+}
+
+.event-card:hover {
+  transform: translateY(-3px);
+}
+
+.event-card img {
+  display: block;
   margin: 0 auto;
-  padding: 2rem;
-  text-align: center;
+  width: 100%;
+  max-width: 1024px;
+  height: auto;
+  border-radius: var(--border-radius);
 }
 
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafbaa);
+button {
+  background-color: var(--primary-color);
+  color: white;
+  border: none;
+  padding: 0.8rem 1.4rem;
+  border-radius: var(--border-radius);
+  cursor: pointer;
+  font-size: 1rem;
+  transition: background 0.2s ease;
 }
 
-@keyframes logo-spin {
-  from {
-    transform: rotate(0deg);
+button:hover {
+  background-color: #661010;
+}
+
+/*  6. Forms  */
+.form-container {
+  width: 100%;
+  max-width: 1200px;
+  padding: 4rem 1rem;
+  margin: 0 auto;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  max-width: 900px;
+  width: 100%;
+  margin: 2rem auto;
+  padding: 3rem;
+  background-color: white;
+  border-radius: var(--border-radius);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+input, textarea, select {
+  width: 100%;
+  padding: 1rem 1.2rem;
+  border: 1px solid #d1d5db;
+  border-radius: var(--border-radius);
+  font-size: 1.2rem;
+  background-color: #f9fafb;
+}
+
+/*  7. Responsive  */
+
+ /* Mid sizes */
+@media (max-width: 1150px) and (min-width: 769px) {
+  .topbar {
+    flex-direction: column;
+    align-items: stretch;
+    text-align: center;
+    gap: 1rem;
   }
-  to {
-    transform: rotate(360deg);
+
+  .topbar > nav:first-of-type {
+    order: 1;
+    flex: none;
+    width: 100%;
+    justify-content: center;
+  }
+
+  .nav {
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 0.6rem 1rem;
+  }
+
+  .topbar > nav:last-of-type {
+    order: 2;
+    justify-content: flex-start;
+  }
+
+  .topbar > div {
+    order: 3;
+    justify-content: flex-end;
+    display: flex;
+  }
+
+  .heading {
+    text-align: right;
+    font-size: 2rem;
   }
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  a:nth-of-type(2) .logo {
-    animation: logo-spin infinite 20s linear;
+
+/*  Tablets  */
+@media (max-width: 992px) {
+  .top-banner {
+    padding: 1.2rem;
+    gap: 1rem;
+  }
+
+  .topbar {
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.8rem;
+  }
+
+  .heading {
+    text-align: center;
+    font-size: 2rem;
+  }
+
+  .nav {
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+  }
+
+  .nav .nav-link {
+    font-size: 0.9rem;
+    padding: 0.5rem 0.8rem;
+  }
+
+  .event-list {
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
   }
 }
 
-.card {
-  padding: 2em;
+@media (min-width: 601px) and (max-width: 740px) {
+  .topbar {
+    flex-direction: column; 
+    align-items: center;
+    gap: 0.8rem;
+  }
+
+  .topbar > nav:first-of-type,
+  .topbar > nav:last-of-type {
+    width: 100%; 
+    justify-content: center;
+  }
+
+  .nav {
+    flex-wrap: wrap;
+    gap: 0.5rem 1rem;
+    justify-content: center;
+  }
 }
 
-.read-the-docs {
-  color: #888;
+/*  Phones  */
+@media (max-width: 600px) {
+  .topbar {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .nav {
+    display: grid;
+    grid-template-columns: repeat(2, auto);
+    justify-content: center;
+    gap: 0.5rem;
+  }
+
+  .heading {
+    font-size: 1.8rem;
+    text-align: center;
+  }
+
+  .nav .nav-link {
+    font-size: 0.85rem;
+    padding: 0.4rem 0.7rem;
+  }
+
+  .event-list {
+    grid-template-columns: 1fr;
+  }
+}
+
+/*  Dark Mode  */
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --primary-color: hsl(300, 80%, 60%); 
+    --text-color: #f0f4f8;
+    --bg-color: #121212;
+    --card-bg: #1e1e1e;
+    --input-bg: #1e1e1e;
+    --input-border: #333;
+    --button-hover: #8b00ff;
+  }
+
+  html, body {
+    background-color: var(--bg-color);
+    color: var(--text-color);
+  }
+
+  .content {
+    background-color: #181818;
+  }
+
+  .event-card {
+    background-color: var(--card-bg);
+    color: var(--text-color);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.6);
+  }
+
+  form {
+    background-color: var(--card-bg);
+    box-shadow: 0 2px 10px rgba(0,0,0,0.6);
+  }
+
+  input, textarea, select {
+    background-color: var(--input-bg);
+    color: var(--text-color);
+    border: 1px solid var(--input-border);
+  }
+
+  button {
+    background-color: var(--primary-color);
+    color: #fff;
+  }
+
+  button:hover {
+    background-color: var(--button-hover);
+  }
+
+  .nav .nav-link,
+  .nav button.nav-link {
+    background: rgba(255, 255, 255, 0.1);
+    color: var(--text-color);
+  }
+
+  .nav .nav-link:hover,
+  .nav button.nav-link:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+  }
 }

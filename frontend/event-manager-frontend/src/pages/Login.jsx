@@ -29,10 +29,13 @@ export default function Login() {
     };
 
     return (
-        <div>
-            <h2>Login</h2>
-            <form onSubmit={handleSubmit}>
+        <div className='form-container'>
+            <h2 className='label'>Login</h2>
+            <form
+                className='form'
+                onSubmit={handleSubmit}>
                 <input
+                    className='input'
                     type="email"
                     placeholder="Email"
                     value={email}
@@ -41,6 +44,7 @@ export default function Login() {
                     style={{ display: 'block', margin: '1rem auto', padding: '0.5rem', width: '100%' }}
                 />
                 <input
+                    className='input'
                     type="password"
                     placeholder="Password"
                     value={password}
@@ -48,10 +52,15 @@ export default function Login() {
                     required
                     style={{ display: 'block', margin: '1rem auto', padding: '0.5rem', width: '100%' }}
                 />
-                <button type="submit" style={{ padding: '0.5rem 1rem' }}>Login</button>
                 <button
+                    className="button"
+                    type="submit"
+                >
+                    Login
+                </button>
+                <button
+                    className="button"
                     type="button"
-                    style={{ padding: "0.5rem 1rem" }}
                     onClick={handleClick}
                 >
                     Sign Up
