@@ -8,7 +8,8 @@ import EventDetail from "../pages/EventDetail";
 import MyEvents from "../pages/MyEvents";
 import CreateEvent from "../pages/CreateEvent";
 import Login from "../pages/Login";
-import Register from "../pages/Register";
+import RegisterStaff from "../pages/RegisterStaff";
+import RegisterMember from "../pages/RegisterMember";
 import CalendarConnected from "../pages/CalendarConnected";
 import ProtectedRoute from "../components/ProtectedRoute";
 
@@ -16,7 +17,7 @@ export function Content() {
     const { user } = useContext(CurrentUser);
 
     return (
-        <div>
+        <div className="content">
             <Routes>
                 <Route
                     path="/"
@@ -30,8 +31,8 @@ export function Content() {
                 />
                 {/* Public routes */}
                 <Route path="/users/login" element={<Login />} />
-                <Route path="/users/register" element={<Register />} />
-
+                <Route path="/users/register/member" element={<RegisterMember />} />
+                <Route path="/users/register/staff" element={<RegisterStaff />} />
                 {/* catch route */}
                 <Route path="*" element={<Navigate to="/" replace />} />
                 {/* Protected routes */}

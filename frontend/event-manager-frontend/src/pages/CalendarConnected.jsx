@@ -8,9 +8,9 @@ export default function CalendarConnected() {
   return (
     <div>
       {status === 'success' ? (
-        <p>Event {event_id} added to your Google Calendar!</p>
+        <p className='p'>Event {event_id} added to your Google Calendar!</p>
       ) : (
-        <p>There was an error adding event {event_id} to Google Calendar.</p>
+        <p className='p'>There was an error adding event {event_id} to Google Calendar.</p>
       )}
     </div>
   );

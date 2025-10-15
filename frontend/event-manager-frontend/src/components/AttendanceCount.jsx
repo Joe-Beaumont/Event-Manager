@@ -13,7 +13,6 @@ export default function AttendanceCount({ event_id, user }) {
 
     getAttendees(event_id)
     .then((attendees) => {
-        // Assuming API returns an array of attendees
         setAttendeeCount(attendees.length || 0);
     })
     .catch((err) => {
@@ -25,11 +24,11 @@ export default function AttendanceCount({ event_id, user }) {
   if (!activeUser || activeUser.role !== "staff") return null;
 
   return (
-    <div>
+    <div className="container">
       {error ? (
         <p style={{ color: "red" }}>{error}</p>
       ) : (
-        <p>Number of attendees: {attendeeCount}</p>
+        <p className="p">Number of attendees: {attendeeCount}</p>
       )}
     </div>
   );

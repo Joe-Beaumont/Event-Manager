@@ -4,7 +4,7 @@ import { postUser, loginUser } from "../api";
 import { CurrentUser } from "../contexts/UserContext";
 
 
-export default function Register() {
+export default function RegisterMember() {
     const [error, setError] = useState(null);
     const [newUser, setNewUser] = useState({
         email: "",
@@ -38,27 +38,32 @@ export default function Register() {
     };
 
     return (
-        <div>
-            <h2>Register new user</h2>
-            <form onSubmit={handleSubmit}>
+        <div className='form-container'>
+            <h2 className='label'>Register new user</h2>
+            <form
+                className='form'
+                onSubmit={handleSubmit}>
                 <input
+                    className='input'
                     name="email"
                     placeholder="email"
                     value={newUser.email}
                     onChange={handleChange}
                 />
                 <input
+                    className='input'
                     name="password"
                     placeholder="password"
                     type="password"
                     value={newUser.password}
                     onChange={handleChange}
                 />
-                <select name="role" value={newUser.role} onChange={handleChange}>
-                    <option value={"staff"}>Staff</option>
-                    <option value={"member"}>Member</option>
-                </select>
-                <button type="submit">Create</button>
+                <button
+                className='button'
+                    type="submit"
+                >
+                    Create
+                </button>
             </form>
         </div>
     );

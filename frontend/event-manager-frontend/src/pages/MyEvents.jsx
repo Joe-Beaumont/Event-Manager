@@ -19,13 +19,13 @@ export default function MyEvents() {
   }, [user]);
 
   if (events.length === 0) {
-    return <p>You have no upcoming events.</p>;
+    return <p className="p">You have no upcoming events.</p>;
   }
-  if (loading) return <p>Loading events...</p>;
-  if (error) return <p style={{ color: "red" }}>{error}</p>;
+  if (loading) return <p className="loading">Loading events...</p>;
+  if (error) return <p  className="error">{error}</p>;
 
   return (
-    <div>
+    <div className="container">
       <h2>Here are your upcoming events:</h2>
       <ul>
         {events.map((event) => (

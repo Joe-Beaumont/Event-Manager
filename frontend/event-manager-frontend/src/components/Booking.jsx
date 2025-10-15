@@ -53,19 +53,26 @@ export default function Booking({ event, user, onRegister, onUnregister }) {
   };
 
   return (
-    <div>
+    <div className="container">
       {!registered ? (
-        <button onClick={handleRegister} disabled={loading}>
+        <button
+          className="button"
+          onClick={handleRegister}
+          disabled={loading}>
           {loading ? "Registering..." : "Register for this event"}
         </button>
       ) : (
-        <button onClick={handleUnregister} disabled={loading}>
+        <button
+          className="button"
+          onClick={handleUnregister}
+          disabled={loading}>
           {loading ? "Unregistering..." : "Unregister"}
         </button>
       )}
 
       {registered && (
         <button
+          className="button"
           onClick={handleAddToCalendar}
           disabled={loading}
           style={{ marginLeft: "1rem" }}

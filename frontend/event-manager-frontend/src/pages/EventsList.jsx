@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { getEvents } from "../api";
 import { EventCard } from "../cards/EventCard";
 
-export default function EventsList({}) {
+export default function EventsList({ }) {
   const [events, setEvents] = useState([]);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -18,15 +18,16 @@ export default function EventsList({}) {
   if (error) return <p style={{ color: "red" }}>{error}</p>;
 
   return (
-    <div>
-      <h2>Upcoming Events</h2>
-      <ul>
+    <div className="events-list">
+      <h2 className="h2">Upcoming Events</h2>
+      <div className="event-list">
         {events.map((event) => (
-          <div key={event.event_id}>
+          <div key={event.event_id} className="event-item">
             <EventCard event={event} />
           </div>
         ))}
-      </ul>
+      </div>
+
     </div>
   );
 };
