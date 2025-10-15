@@ -136,6 +136,7 @@ Backend uses googleapis package to manage calendar events.
 
 Folder Structure
 
+```
 beaumont-conference-center/
 ├── backend/
 │   ├── controllers/
@@ -154,3 +155,4 @@ beaumont-conference-center/
 │   └── package.json
 ├── README.md
 └── .env.example
+```
