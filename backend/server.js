@@ -19,13 +19,14 @@ const frontendPath = path.join(__dirname, '../frontend/dist');
 app.use(express.static(frontendPath));
 
 // Catch-all route for React
-app.get('*', (req, res) => {
+app.get('/:catchAll(.*)', (req, res) => {
   // only serve index.html if the request is NOT for /api or /auth
   if (req.path.startsWith('/api') || req.path.startsWith('/auth')) {
     return handle404(req, res);
   }
   res.sendFile(path.join(frontendPath, 'index.html'));
 });
+
 
 // Error Handling middleware
 app.use(handlePostgresErrors);
