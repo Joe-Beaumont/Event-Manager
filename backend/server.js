@@ -14,10 +14,6 @@ app.use("/api", apiRouter)
 const googleAuthRoutes = require("./routers/googleAuth.router");
 app.use("/auth", googleAuthRoutes);
 
-// Serve React frontend
-const frontendPath = path.join(__dirname, '../frontend/dist');
-app.use(express.static(frontendPath));
-
 
 // Error Handling middleware
 app.use(handlePostgresErrors);
