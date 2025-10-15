@@ -10,7 +10,7 @@
     "start": "node listen.js",
     "test-seed": "jest seed.test.js",
     "seed-prod": "NODE_ENV=production npm run seed-dev",
-    "postinstall": "cd ../frontend && npm install && npm run build"
+    "postinstall": "cd ../frontend/event-manager-frontend && npm install && npm run build"
   },
   "keywords": [],
   "author": "",
