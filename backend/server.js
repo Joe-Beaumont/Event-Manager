@@ -17,11 +17,16 @@ app.use("/auth", googleAuthRoutes);
 const frontendDist = path.join(__dirname, '../frontend/event-manager-frontend/dist');
 app.use(express.static(frontendDist));
 
-app.get('*', (req, res) => {
-  if (req.path.startsWith('/api') || req.path.startsWith('/auth')) return handle404(req, res);
+// Catch-all route to serve index.html for React Router
+app.use((req, res, next) => {
+  if (req.path.startsWith('/api') || req.path.startsWith('/auth')) {
+    return handle404(req, res);
+  }
   res.sendFile(path.join(frontendDist, 'index.html'));
 });
 
+
+// Error Handling middleware
 app.use(handlePostgresErrors);
 app.use(handleCustomErrors);
 app.use(handleServerErrors);
