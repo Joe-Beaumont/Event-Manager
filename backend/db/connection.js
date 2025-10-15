@@ -1,19 +1,30 @@
 const { Pool, types } = require('pg');
 const ENV = process.env.NODE_ENV || 'development';
-require('dotenv').config({ path: `${__dirname}/../.env.${ENV}`});
+require('dotenv').config({ path: `${__dirname}/../.env.${ENV}` });
 
 // Overriding parsing of dates
 types.setTypeParser(1082, (val) => val);
 
-if(!process.env.PGDATABASE && !process.env.DATABASE_URL) {
-    throw new Error('No PGDATABASE configured or DATABASE_URL not set');
-} else {
-    console.log(`Connected to ${process.env.PGDATABASE}`);
+const connectionString =
+  process.env.PGDATABASE_URL ||
+  process.env.DATABASE_URL ||
+  process.env.PGDATABASE;
+
+if (!connectionString) {
+  throw new Error('No database connection string found.');
 }
-const config = {};
-if (ENV === 'production') {
-    config.connectionString = process.env.PGDATABASE_URL;
-    config.max = 2;
-}
+
+console.log(`✅ Connecting to database: ${connectionString}`);
+
+const config = {
+  connectionString,
+  max: 2,
+  ssl:
+    ENV === 'production'
+      ? { rejectUnauthorized: false }
+      : false,
+};
+
 const db = new Pool(config);
+
 module.exports = db;
