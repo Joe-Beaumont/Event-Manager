@@ -1,9 +1,6 @@
 import axios from 'axios';
 
-const isLocal = true;
-const baseURL = isLocal
-    ? "http://localhost:9090/api/"
-    : "https://event-manager-5ow3.onrender.com/api/"
+const baseURL = import.meta.env.VITE_API_URL ? `${import.meta.env.VITE_API_URL}/api/` : 'http://localhost:9090/api/';
 
 function handleError(error) {
     throw new Error(`Error: ${error.response?.data?.msg || error.message}`);
