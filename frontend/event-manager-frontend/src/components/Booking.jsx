@@ -53,7 +53,7 @@ export default function Booking({ event, user, onRegister, onUnregister }) {
   };
 
   return (
-    <div className="container">
+    <div className="booking-buttons">
       {!registered ? (
         <button
           className="button"
