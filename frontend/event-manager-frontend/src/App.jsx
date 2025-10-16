@@ -10,9 +10,9 @@ export default function App() {
     <div className="app-container">
       <header className="top-banner">
         <div className="topbar">
+          <Login />
           <Nav />
           <Header />
-          <Login />
         </div>
       </header>
 

@@ -55,7 +55,7 @@ export default function EventDetail() {
         <p className="p">{event.description}</p>
         <p className="p">{new Date(event.start_time).toLocaleString()}</p>
         <p className="p">{new Date(event.end_time).toLocaleString()}</p>
-        {event.image_url && <img className="event-card img" src={event.image_url} alt={event.name} />}
+        {event.image_url && <img className="event-image" src={event.image_url} alt={event.name} />}
 
         <Booking
           event={event}
