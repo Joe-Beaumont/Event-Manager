@@ -75,9 +75,7 @@ export default function Booking({ event, user, onRegister, onUnregister }) {
           className="button"
           onClick={handleAddToCalendar}
           disabled={loading}
-          style={{ marginLeft: "1rem" }}
-        >
-          Add to Google Calendar
+        >Add to Google Calendar
         </button>
       )}
     </div>
