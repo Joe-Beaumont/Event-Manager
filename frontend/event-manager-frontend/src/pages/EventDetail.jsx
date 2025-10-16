@@ -49,12 +49,12 @@ export default function EventDetail() {
   if (!event) return <p>No event found</p>;
 
   return (
-    <div className="container">
+    <div className="event-detail">
       <h2 className="h2">{event.name}</h2>
       <p className="p">{event.description}</p>
       <p className="p">{new Date(event.start_time).toLocaleString()}</p>
       <p className="p">{new Date(event.end_time).toLocaleString()}</p>
-      {event.image_url && <img src={event.image_url} alt={event.name} />}
+      {event.image_url && <img className="event-card img" src={event.image_url} alt={event.name} />}
 
       <Booking
         event={event}

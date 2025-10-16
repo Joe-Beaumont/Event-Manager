@@ -7,9 +7,13 @@ export function Nav() {
 
     return (
         <nav className={`nav ${user?.role === "staff" ? "staff" : ""}`}>
-            <Link className='nav-link' to="/">Home</Link>
-            <Link className='nav-link' to="/events">Upcoming Events</Link>
-            <Link className='nav-link' to="/users/1/events">My Events</Link>
+            {user ? (
+                <div>
+                    <Link className='nav-link' to="/">Home</Link>
+                    <Link className='nav-link' to="/events">Upcoming Events</Link>
+                    <Link className='nav-link' to="/users/1/events">My Events</Link>
+                </div>
+            ) : null}
             {user?.role === "staff" ? (
                 <div>
                     <Link className='nav-link' to="/events/create">Post New Event</Link>
