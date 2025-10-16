@@ -257,7 +257,6 @@ input, textarea, select {
   }
 }
 
-/* FIXED NAV BUTTONS - The Key Improvement! */
 @media (max-width: 768px) {
   .topbar {
     flex-direction: column;
@@ -272,7 +271,6 @@ input, textarea, select {
   }
 
   .nav {
-    /* FLEX FLOW INSTEAD OF GRID - Clean, even spacing! */
     flex-direction: row;
     flex-wrap: wrap;
     justify-content: center;
@@ -297,7 +295,6 @@ input, textarea, select {
   }
 
   .nav {
-    /* Single row, full width buttons on tiny screens */
     flex-direction: row;
     justify-content: space-evenly;
     gap: var(--spacing-xs);

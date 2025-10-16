@@ -49,7 +49,7 @@ export default function EventDetail() {
   if (!event) return <p>No event found</p>;
 
   return (
-    <div className="container">
+    <div className="event-list" >
       <div className="event-detail">
         <h2 className="h2">{event.name}</h2>
         <p className="p">{event.description}</p>
